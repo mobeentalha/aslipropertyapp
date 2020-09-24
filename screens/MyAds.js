@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, StatusBar, ImageBackground, FlatList } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, StatusBar, ImageBackground, FlatList, Alert } from 'react-native';
 import { Input } from 'react-native-elements';
 import MyIcon from '../components/MyIcon'
 import MyBtn from '../components/MyBtn'
 import ItemCard from '../components/ItemCard'
+import axios from 'axios';
 
 export default class MyAds extends Component {
     constructor(Props) {
@@ -18,32 +19,34 @@ export default class MyAds extends Component {
                     tag: "10 Marla",
                     ToScreen: "ItemDetail"
                 },
-                {
-                    id: "2",
-                    price: 500000,
-                    description: "This is just some random text to text the application UI",
-                    imageSrc: require('../assets/images/ads/1.png'),
-                    tag: "20 Marla",
-                    ToScreen: "ItemDetail"
-                },
-                {
-                    id: "3",
-                    price: 9999,
-                    description: "This is just some random text to text the application UI",
-                    imageSrc: require('../assets/images/ads/1.png'),
-                    tag: "5 Marla",
-                    ToScreen: "ItemDetail"
-                },
-                {
-                    id: "4",
-                    price: 995399,
-                    description: "This is just some random text to text the application UI",
-                    imageSrc: require('../assets/images/ads/1.png'),
-                    tag: "3 Marla",
-                    ToScreen: "ItemDetail"
-                },
-            ]
+            ],
+            user:[],
         }
+    }
+    async _retrieveData() {
+        try {
+          const retrievedItem = await AsyncStorage.getItem('User');
+          const data = JSON.parse(retrievedItem);
+          if (data) {
+            this.setState({user:data})
+            this.getMyAds();
+          }
+        } catch (error) {
+        }
+      }
+      getMyAds(){
+        axios.get(`https://property12.herokuapp.com/api/banner/get/`+user._id)
+        .then(response =>{
+            console.log(response.data.data)
+            Alert.alert(response.data.data._id)
+        }).catch(error => {
+            if (error) {
+                Alert.alert("Error", "No Data Found!")
+            }
+        });
+      }
+    componentDidMount(){
+        this._retrieveData();
     }
     render() {
         return (

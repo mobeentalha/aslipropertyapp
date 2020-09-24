@@ -23,12 +23,13 @@ export default class Signup extends Component {
       password: "",
       email: "",
       confirmPass: "",
-      loading: false
+      loading: false,
+      location: "",
     }
   }
   create() {
     const { navigate } = this.props.navigation;
-    if (this.state.name.length && this.state.cnic.length && this.state.phoneNo.length && this.state.password.length && this.state.confirmPass) {
+    if (this.state.name.length && this.state.cnic.length && this.state.phoneNo.length && this.state.password.length && this.state.confirmPass && this.state.location) {
       if(this.state.cnic.length == CNICLength && this.state.phoneNo.length == NumberLength){
       if (this.state.password == this.state.confirmPass) {
         this.setState({ loading: true })
@@ -38,6 +39,7 @@ export default class Signup extends Component {
           phoneNo: this.state.phoneNo,
           password: this.state.password,
           email: this.state.email,
+          location: this.state.location,
         }).then(response => {
           this.setState({ loading: false })
           if (response.status==200) {
@@ -108,6 +110,12 @@ export default class Signup extends Component {
               labelStyle={this.state.phoneNo.length == NumberLength ? styles.labelStyleGood : styles.labelStyle}
               placeholderTextColor="gray"
               onChangeText={(text) => this.setState({ phoneNo: text })}
+            />
+            <Input
+              inputContainerStyle={styles.inputStyles}
+              placeholder='Location'
+              placeholderTextColor="gray"
+              onChangeText={(text) => this.setState({ location: text })}
             />
             <Input
               inputContainerStyle={styles.inputStyles}

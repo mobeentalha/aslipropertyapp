@@ -37,10 +37,14 @@ export default class Login extends Component {
       const retrievedItem = await AsyncStorage.getItem('User');
       const data = JSON.parse(retrievedItem);
       if (data) {
+        // this.props.navigation.reset({
+        //     index: 0,
+        //     routes: [{ name: "Auth" }],
+        // })
         this.props.navigation.reset({
-            index: 0,
-            routes: [{ name: "Auth" }],
-        })
+          index: 0,
+          routes: [{ name: "Home" }],
+      })
       }
     } catch (error) {
     }

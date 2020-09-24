@@ -12,40 +12,7 @@ export default class Home extends Component {
         super(Props);
         this.state = {
             safe: true,
-            data:[
-                {
-                    id:"1",
-                    price: 10000,
-                    description: "This is just some random text to text the application UI",
-                    imageSrc: require('../assets/images/ads/1.png'),
-                    tag: "10 Marla",
-                    ToScreen: "ItemDetail"
-                },
-                {
-                    id:"2",
-                    price: 500000,
-                    description: "This is just some random text to text the application UI",
-                    imageSrc: require('../assets/images/ads/1.png'),
-                    tag: "20 Marla",
-                    ToScreen: "ItemDetail"
-                },
-                {
-                    id:"3",
-                    price: 9999,
-                    description: "This is just some random text to text the application UI",
-                    imageSrc: require('../assets/images/ads/1.png'),
-                    tag: "5 Marla",
-                    ToScreen: "ItemDetail"
-                },
-                {
-                    id:"4",
-                    price: 995399,
-                    description: "This is just some random text to text the application UI",
-                    imageSrc: require('../assets/images/ads/1.png'),
-                    tag: "3 Marla",
-                    ToScreen: "ItemDetail"
-                }
-            ],
+            data:[],
         }
     }
     componentDidMount() {
@@ -82,15 +49,16 @@ export default class Home extends Component {
                     data={this.state.data}
                     renderItem={({item}) => 
                         <ItemCard 
-                            imageSrc={item.image} 
+                            imageSrc={{uri:item.image[0]}} 
                             price={item.price} 
                             description={item.description} 
-                            tag={item.area} 
-                            ToScreen={item.ToScreen}
+                            tag={item.city}
+                            _id={item._id}
                         />
                     }
-                    keyExtractor={item => item.id}
                     numColumns={2}
+                    columnWrapperStyle={styles.row}
+                    keyExtractor={item => item._id}
                     showsVerticalScrollIndicator={false}
                     />
                     <StatusBar barStyle="light-content" translucent={true} backgroundColor="transparent" />
@@ -131,5 +99,9 @@ const styles = StyleSheet.create({
             width: 0
         },
         elevation: 10
+    },
+    row: {
+        flex: 1,
+        justifyContent: "space-around"
     }
 });

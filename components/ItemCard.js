@@ -30,10 +30,11 @@ const navigation = useNavigation();
     <View style={{flex:1}}>
       <TouchableOpacity
       onPress={() =>
-        Props.ToScreen ?
-        navigation.navigate("ItemDetail")
-        : null
+        navigation.navigate("ItemDetail", {
+          _id: Props._id,
+      })
       }>
+        
     <Card
     containerStyle={{padding:5, borderRadius:10, flex:1,margin:5, backgroundColor:"rgba(255, 255, 255, 0.9)", borderBottomColor:"rgba(255, 255, 255, 0.9)"}}
     image={Props.imageSrc}>
