@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, StatusBar, ImageBackground, FlatList, Alert } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, StatusBar, ImageBackground, FlatList, Alert, AsyncStorage } from 'react-native';
 import { Input } from 'react-native-elements';
 import MyIcon from '../components/MyIcon'
 import MyBtn from '../components/MyBtn'
@@ -10,17 +10,9 @@ export default class MyAds extends Component {
     constructor(Props) {
         super(Props);
         this.state = {
-            MyAds: [
-                {
-                    id: "1",
-                    price: 10000,
-                    description: "This is just some random text to text the application UI",
-                    imageSrc: require('../assets/images/ads/1.png'),
-                    tag: "10 Marla",
-                    ToScreen: "ItemDetail"
-                },
-            ],
-            user:[],
+            myAds: [],
+            favorite: [],
+            user:{},
         }
     }
     async _retrieveData() {
@@ -30,15 +22,28 @@ export default class MyAds extends Component {
           if (data) {
             this.setState({user:data})
             this.getMyAds();
+            this.getfavorite();
           }
         } catch (error) {
+            Alert.alert(error.message)
         }
       }
       getMyAds(){
-        axios.get(`https://property12.herokuapp.com/api/banner/get/`+user._id)
+        axios.get(`https://property12.herokuapp.com/api/banner/get_phone/`+this.state.user.phoneNo)
         .then(response =>{
-            console.log(response.data.data)
-            Alert.alert(response.data.data._id)
+            var data = response.data.data
+            this.setState({myAds:data})
+        }).catch(error => {
+            if (error) {
+                Alert.alert("Error", "No Data Found!")
+            }
+        });
+      }
+      getfavorite(){
+        axios.get(`https://property12.herokuapp.com/api/favorite/get_phone/`+this.state.user.phoneNo)
+        .then(response =>{
+            var data = response.data.data
+            this.setState({favorite:data})
         }).catch(error => {
             if (error) {
                 Alert.alert("Error", "No Data Found!")
@@ -57,21 +62,42 @@ export default class MyAds extends Component {
                         <Text style={styles.titles}>Favorites</Text>
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: "space-between" }}>
+                        {this.state.myAds ? 
                         <FlatList
-                            style={{ margin: 5, marginBottom: 0 }}
-                            data={this.state.MyAds}
-                            renderItem={({ item }) => <ItemCard imageSrc={item.imageSrc} price={item.price} description={item.description} tag={item.tag} ToScreen={item.ToScreen} />}
-                            keyExtractor={item => item.id}
-                            showsVerticalScrollIndicator={false}
+                        style={{flex:1}}
+                        data={this.state.myAds}
+                        renderItem={({item}) => 
+                            <ItemCard 
+                                imageSrc={{uri:item.image[0]}} 
+                                price={item.price} 
+                                description={item.description} 
+                                tag={item.city}
+                                _id={item._id}
+                            />
+                        }
+                        keyExtractor={item => item._id}
+                        showsVerticalScrollIndicator={false}
                         />
-                        <View style={{ width: 2, backgroundColor: '#fff', marginTop: 10 }} />
+                    :null}
+                        
+                        <View style={{ width: 2, backgroundColor: '#fff', marginTop: 10,marginHorizontal:10 }} />
+                        {this.state.favorite ? 
                         <FlatList
-                            style={{ margin: 5, marginBottom: 0 }}
-                            data={this.state.MyAds}
-                            renderItem={({ item }) => <ItemCard imageSrc={item.imageSrc} price={item.price} description={item.description} tag={item.tag} ToScreen={item.ToScreen} />}
-                            keyExtractor={item => item.id}
-                            showsVerticalScrollIndicator={false}
+                        style={{flex:1}}
+                        data={this.state.favorite}
+                        renderItem={({item}) => 
+                            <ItemCard 
+                                imageSrc={{uri:item.image[0]}} 
+                                price={item.price} 
+                                description={item.description} 
+                                tag={item.city}
+                                _id={item._id}
+                            />
+                        }
+                        keyExtractor={item => item._id}
+                        showsVerticalScrollIndicator={false}
                         />
+                    :null}
                     </View>
 
                     <StatusBar barStyle="light-content" translucent={true} backgroundColor="transparent" />
