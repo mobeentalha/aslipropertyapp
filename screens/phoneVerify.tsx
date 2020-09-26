@@ -49,7 +49,7 @@ export default function PhoneAuthScreen(navigation) {
   const [confirmError, setConfirmError] = React.useState<Error>();
   const [confirmInProgress, setConfirmInProgress] = React.useState(false);
   const isConfigValid = !!FIREBASE_CONFIG.apiKey;
-
+  console.log('data in auth : ', navigation.route.params.newPhone)
   return (
     <View style={styles.container}>
        <ImageBackground source={require("../assets/images/bg.png")} style={styles.bg}>
@@ -73,7 +73,8 @@ export default function PhoneAuthScreen(navigation) {
           autoCompleteType="tel"
           keyboardType="phone-pad"
           textContentType="telephoneNumber"
-          placeholder='Phone Number'
+          placeholder={navigation.route.params.newPhone}
+          value={navigation.route.params.newPhone}
           editable={!verificationId}
           onChangeText={(phoneNumber: string) => setPhoneNumber(phoneNumber)}
         />

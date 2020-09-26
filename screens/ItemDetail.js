@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, StatusBar, Image, ImageBackground, Alert } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, StatusBar, Image, ImageBackground, Alert, AsyncStorage } from 'react-native';
 import Colors from '../constants/Colors';
 import { SliderBox } from "react-native-image-slider-box"
 import { ScrollView } from 'react-native-gesture-handler';
@@ -15,9 +15,23 @@ export default class ItemDetail extends Component {
             data:[],
             loaded: false,
             favorite:false,
+            favoriteArray: [],
+            user: {},
         }
     }
+    async _retrieveData() {
+        try {
+          const retrievedItem = await AsyncStorage.getItem('User');
+          const data = JSON.parse(retrievedItem);
+          if (data) {
+            this.setState({user:data})
+          }
+        } catch (error) {
+            Alert.alert(error.message)
+        }
+      }
     componentDidMount(){
+        this._retrieveData();
         const {_id} = this.props.route.params
         this.setState({itemId:_id})
         axios.get(`https://property12.herokuapp.com/api/banner/get/`+_id)
@@ -31,9 +45,45 @@ export default class ItemDetail extends Component {
         });
     }
 
-    favoriteClicked(){
+    favoriteClicked(id){
+        console.log('fav click', id)
         this.setState({favorite:!this.state.favorite})
+        let favArray = this.state.favoriteArray;
+        favArray.push(id);
+        console.log('array pus ', favArray)
+        this.setState({ favoriteArray: favArray})
+        axios.get(`https://property12.herokuapp.com/api/favorite/get_phone/`+this.state.user.phoneNo)
+        .then(response =>{
+            var data = response.data.data
+            console.log('data : ', data)
+            if(data.length === 0){
+                data = {
+                    bannerId: this.state.favoriteArray,
+                    phoneNo: this.state.user.phoneNo
+                }
+                axios.post(`https://property12.herokuapp.com/api/favorite/add`,data)
+                .then(response => {
+                    console.log('response : ', response)
+                }).catch(error => {
+                    if(error){
+                        Alert.alert("Error", "Not Addes")
+                    }
+                })
+            }
+            else{
+                
+            }
+            // this.setState({favorite:data})
+        }).catch(error => {
+            if (error) {
+                Alert.alert("Error", "No Data Found!")
+            }
+        });
     }
+
+    chatIconClicked() {
+        console.log('data : ', this.state.data)
+    } 
     
     render() {
         return (
@@ -42,8 +92,8 @@ export default class ItemDetail extends Component {
                 <ImageBackground source={require("../assets/images/bg.png")} style={styles.bg}>
                     <View style={{ paddingHorizontal: 20, paddingTop: 20,flexDirection:"row", justifyContent:'space-between' }}>
                         <BackArrowBtn />
-                        <TouchableOpacity onPress={this.state.favorite ? () => this.favoriteClicked() : () => this.favoriteClicked() }>
-                        <MyIcon name="heart" size={30} color={this.state.favorite ? Colors.mainLightColor : "#fff"} />
+                        <TouchableOpacity onPress={() => this.favoriteClicked(this.state.data._id) }>
+                            <MyIcon name="heart" size={30} color={this.state.favorite ? Colors.mainLightColor : "#fff"} />
                         </TouchableOpacity>
                     </View>
                     <StatusBar barStyle="light-content" translucent={true} backgroundColor="transparent" />
@@ -62,8 +112,18 @@ export default class ItemDetail extends Component {
                     />
 
                     <View style={styles.bgPadding}>
-                        <Text style={styles.detailTxt}>Details</Text>
-
+                        <View style={{flexDirection: 'row', width: '100%'}}>
+                            <Text style={styles.detailTxt}>Details</Text>
+                            <TouchableOpacity 
+                                onPress={() => this.chatIconClicked() } 
+                                style={{marginLeft: '55%', marginTop: '2%'}} >
+                                <MyIcon 
+                                    name="wechat" 
+                                    size={30} 
+                                    color={this.state.favorite ? Colors.mainLightColor : "#fff"}   
+                                />
+                            </TouchableOpacity>
+                        </View>
                         <View style={styles.detailCon}>
                             <ScrollView showsVerticalScrollIndicator={false}>
                                 <DetailRow Dark={true} IconName="home" IconColor="#fff" IconSize={25} Title="Property ID" Description={this.state.data._id} />

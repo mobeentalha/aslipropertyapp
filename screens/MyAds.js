@@ -82,22 +82,22 @@ export default class MyAds extends Component {
                         
                         <View style={{ width: 2, backgroundColor: '#fff', marginTop: 10,marginHorizontal:10 }} />
                         {this.state.favorite ? 
-                        <FlatList
-                        style={{flex:1}}
-                        data={this.state.favorite}
-                        renderItem={({item}) => 
-                            <ItemCard 
-                                imageSrc={{uri:item.image[0]}} 
-                                price={item.price} 
-                                description={item.description} 
-                                tag={item.city}
-                                _id={item._id}
+                            <FlatList
+                            style={{flex:1}}
+                            data={this.state.favorite}
+                            renderItem={({item}) => 
+                                <ItemCard 
+                                    imageSrc={{uri:item.image}} 
+                                    price={item.price} 
+                                    description={item.description} 
+                                    tag={item.city}
+                                    _id={item._id}
+                                />
+                            }
+                            keyExtractor={item => item._id}
+                            showsVerticalScrollIndicator={false}
                             />
-                        }
-                        keyExtractor={item => item._id}
-                        showsVerticalScrollIndicator={false}
-                        />
-                    :null}
+                        :null}
                     </View>
 
                     <StatusBar barStyle="light-content" translucent={true} backgroundColor="transparent" />
