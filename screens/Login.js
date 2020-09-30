@@ -37,15 +37,15 @@ export default class Login extends Component {
       const retrievedItem = await AsyncStorage.getItem('User');
       const data = JSON.parse(retrievedItem);
       if (data) {
-        let newPhone = '+92'+this.state.phoneNo;
-        this.props.navigation.navigate(
-          'Auth',
-          { 'newPhone': newPhone},
-        );
-        // this.props.navigation.reset({
-        //     index: 0,
-        //     routes: [{ name: "Home" }]
-        // })
+        // let newPhone = '+92'+this.state.phoneNo;
+        // this.props.navigation.navigate(
+        //   'Auth',
+        //   { 'newPhone': newPhone},
+        // );
+        this.props.navigation.reset({
+            index: 0,
+            routes: [{ name: "Home" }]
+        })
       }
     } catch (error) {
     }
