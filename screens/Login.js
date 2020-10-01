@@ -38,14 +38,14 @@ export default class Login extends Component {
       const data = JSON.parse(retrievedItem);
       if (data) {
         let newPhone = '+92'+this.state.phoneNo;
-        // this.props.navigation.navigate(
-        //   'Auth',
-        //   { newPhone },
-        // );
-        this.props.navigation.reset({
-            index: 0,
-            routes: [{ name: "Home" }]
-        })
+        this.props.navigation.navigate(
+          'Auth',
+          { newPhone },
+        );
+        // this.props.navigation.reset({
+        //     index: 0,
+        //     routes: [{ name: "Home" }]
+        // })
       }
     } catch (error) {
     }

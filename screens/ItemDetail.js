@@ -86,6 +86,7 @@ export default class ItemDetail extends Component {
     } 
     
     render() {
+        console.log('data state : ', this.state.data)
         return (
             <View style={styles.container}>
                     {this.state.loaded? 
