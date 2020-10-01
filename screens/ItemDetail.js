@@ -66,7 +66,8 @@ export default class ItemDetail extends Component {
         this.setState({ itemId: _id })
         axios.get(`https://property12.herokuapp.com/api/banner/get/` + _id)
             .then(response => {
-                this.setState({ data: response.data.data[0] })
+                console.log('response', response)
+                this.setState({ data: response.data.data })
                 this.setState({ loaded: true })
                 this.getFavorites();
             }).catch(error => {
@@ -185,7 +186,6 @@ export default class ItemDetail extends Component {
     }
 
     render() {
-        console.log('data state : ', this.state.data)
         return (
             <View style={styles.container}>
                 {this.state.loaded && this.state.data._id ?
@@ -220,7 +220,7 @@ export default class ItemDetail extends Component {
                                     <MyIcon
                                         name="wechat"
                                         size={30}
-                                        color={this.state.favorite ? Colors.mainLightColor : "#fff"}
+                                        color={"#fff"}
                                     />
                                 </TouchableOpacity>
                             </View>

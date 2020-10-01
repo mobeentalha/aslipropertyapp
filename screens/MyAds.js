@@ -35,7 +35,7 @@ export default class MyAds extends Component {
             this.setState({myAds:data})
         }).catch(error => {
             if (error) {
-                Alert.alert("Error", "No Data Found!")
+                console.log('no data')
             }
         });
       }
@@ -43,10 +43,16 @@ export default class MyAds extends Component {
         axios.get(`https://property12.herokuapp.com/api/favorite/get_phone/`+this.state.user.phoneNo)
         .then(response =>{
             var data = response.data.data
+            console.log('data : ', data)
+            data.bannerId.map((value, key) => {
+                console.log('value :: ', value)
+                // axios.get(`https://property12.herokuapp.com/api/banner/get/`+value)
+            })
+            
             this.setState({favorite:data})
         }).catch(error => {
             if (error) {
-                Alert.alert("Error", "No Data Found!")
+                console.log('nodata')
             }
         });
       }
