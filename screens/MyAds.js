@@ -62,12 +62,12 @@ export default class MyAds extends Component {
                         <Text style={styles.titles}>Favorites</Text>
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: "space-between" }}>
-                        {this.state.myAds ? 
+                        {this.state.myAds.length ? 
                         <FlatList
                         style={{flex:1}}
                         data={this.state.myAds}
                         renderItem={({item}) => 
-                            <ItemCard 
+                            <ItemCard
                                 imageSrc={{uri:item.image[0]}} 
                                 price={item.price} 
                                 description={item.description} 
@@ -78,10 +78,13 @@ export default class MyAds extends Component {
                         keyExtractor={item => item._id}
                         showsVerticalScrollIndicator={false}
                         />
-                    :null}
+                    :
+                    <View style={styles.noDataCon}>
+                        <Text style={styles.noData}>No Data Found</Text>
+                    </View>}
                         
                         <View style={{ width: 2, backgroundColor: '#fff', marginTop: 10,marginHorizontal:10 }} />
-                        {this.state.favorite ? 
+                        {this.state.favorite.length ? 
                             <FlatList
                             style={{flex:1}}
                             data={this.state.favorite}
@@ -91,13 +94,15 @@ export default class MyAds extends Component {
                                     price={item.price} 
                                     description={item.description} 
                                     tag={item.city}
-                                    _id={item._id}
+                                    _id={item.bannerId}
                                 />
                             }
                             keyExtractor={item => item._id}
                             showsVerticalScrollIndicator={false}
                             />
-                        :null}
+                        :<View style={styles.noDataCon}>
+                        <Text style={styles.noData}>No Data Found</Text>
+                    </View>}
                     </View>
 
                     <StatusBar barStyle="light-content" translucent={true} backgroundColor="transparent" />
@@ -148,5 +153,17 @@ const styles = StyleSheet.create({
         fontWeight:'bold',
         fontStyle:'italic',
         marginVertical:10
+    },
+    noData:{
+        fontSize:30,
+        textAlign:'center',
+        color:"#fff",
+        fontStyle:"italic",
+        fontWeight:'bold',
+    },
+    noDataCon:{
+        flex:1,
+        justifyContent:'center',
+        alignItems:'center'
     }
 });

@@ -318,7 +318,6 @@ export default class AddItem extends Component {
                             placeholderTextColor="gray"
                             label="Area:"
                             multiline={true}
-                            numberOfLines={5}
                             labelStyle={styles.labelStyle}
                             onChangeText={(text) => this.inputchange('area', text)}
                         />
@@ -328,7 +327,6 @@ export default class AddItem extends Component {
                             placeholderTextColor="gray"
                             label="Purpose:"
                             multiline={true}
-                            numberOfLines={5}
                             labelStyle={styles.labelStyle}
                             onChangeText={(text) => this.inputchange('purpose', text)}
                         />
@@ -338,7 +336,6 @@ export default class AddItem extends Component {
                             placeholderTextColor="gray"
                             label="City:"
                             multiline={true}
-                            numberOfLines={5}
                             labelStyle={styles.labelStyle}
                             onChangeText={(text) => this.inputchange('city', text)}
                         />
@@ -348,7 +345,6 @@ export default class AddItem extends Component {
                             placeholderTextColor="gray"
                             label="Location:"
                             multiline={true}
-                            numberOfLines={5}
                             labelStyle={styles.labelStyle}
                             onChangeText={(text) => this.inputchange('location', text)}
                         />
