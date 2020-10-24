@@ -21,7 +21,7 @@ function DetailRow(Props) {
         },
         description: {
             color: "#fff",
-            fontSize: 20,
+            fontSize: 18,
             flex: 1,
             fontStyle: "italic",
         },

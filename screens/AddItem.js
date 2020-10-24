@@ -23,6 +23,7 @@ import Constants from 'expo-constants';
 import MyBtn from '../components/MyBtn';
 import axios from 'axios';
 import {Toast} from 'native-base'
+import * as Device from 'expo-device';
 
 export default class AddItem extends Component {
 
@@ -68,7 +69,8 @@ export default class AddItem extends Component {
             location: '',
             description:'',
             proofSelect:'',
-            userPhone: ''
+            userPhone: '',
+            device_id: Device.osBuildId,
         }
     }
     componentDidMount() {
@@ -276,6 +278,7 @@ export default class AddItem extends Component {
     };
 
     render() {
+        console.log('device id : ', this.state.device_id);
         return (
             <View style={styles.container}>
                 <ImageBackground source={require("../assets/images/bg.png")} style={styles.bg}>
@@ -451,7 +454,7 @@ const styles = StyleSheet.create({
     bg: {
         flex: 1,
         paddingHorizontal: 20,
-        paddingTop: 20,
+        paddingTop: 30,
         flexDirection: 'column',
     },
     logo: {

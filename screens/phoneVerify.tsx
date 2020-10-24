@@ -16,6 +16,7 @@ import * as FirebaseRecaptcha from "expo-firebase-recaptcha";
 import * as firebase from "firebase";
 import MyBtn from '../components/MyBtn'
 import Colors from '../constants/Colors';
+import BackArrowBtn from '../components/BackArrowBtn'
 
 // PROVIDE VALID FIREBASE CONFIG HERE
 // https://firebase.google.com/docs/web/setup
@@ -41,7 +42,7 @@ try {
 export default function PhoneAuthScreen(navigation) {
   const recaptchaVerifier = React.useRef(null);
   const verificationCodeTextInput = React.useRef(null);
-  const [phoneNumber, setPhoneNumber] = React.useState("");
+  const [phoneNumber, setPhoneNumber] = React.useState(navigation.route.params.newPhone);
   const [verificationId, setVerificationId] = React.useState("");
   const [verifyError, setVerifyError] = React.useState<Error>();
   const [verifyInProgress, setVerifyInProgress] = React.useState(false);
@@ -53,8 +54,11 @@ export default function PhoneAuthScreen(navigation) {
   return (
     <View style={styles.container}>
        <ImageBackground source={require("../assets/images/bg.png")} style={styles.bg}>
+       <BackArrowBtn />
        <StatusBar barStyle="light-content" translucent={true} backgroundColor="transparent" />
+       
        <View style={styles.logo}>
+       
             <View style={styles.logoImg}>
               <Image source={require("../assets/images/logo.png")} />
             </View>
@@ -68,14 +72,15 @@ export default function PhoneAuthScreen(navigation) {
         />
         <View style={styles.inputCon}>
         <TextInput
-          style={styles.inputStyles}
+          style={styles.disableInputStyles}
           autoFocus={isConfigValid}
           autoCompleteType="tel"
           keyboardType="phone-pad"
           textContentType="telephoneNumber"
           placeholder={navigation.route.params.newPhone}
-          editable={!verificationId}
-          onChangeText={(phoneNumber: string) => setPhoneNumber(phoneNumber)}
+          value={navigation.route.params.newPhone}
+          editable={false}
+          // onChangeText={(phoneNumber: string) => setPhoneNumber(phoneNumber)}
         />
         <MyBtn 
             title={`${verificationId ? "Resend" : "Send"} Verification Code`}
@@ -199,6 +204,22 @@ const styles = StyleSheet.create({
   text: {
     marginTop: 30,
     marginBottom: 4,
+  },
+  disableInputStyles: {
+    borderColor: '#dedede',
+    borderWidth: 1,
+    backgroundColor: "#A8A8A8",
+    borderRadius: 10,
+    paddingLeft: 10,
+    padding: 5,
+    shadowColor: 'black',
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    shadowOffset: {
+      height: 0,
+      width: 0
+    },
+    elevation: 10
   },
   inputStyles: {
     borderColor: 'transparent',

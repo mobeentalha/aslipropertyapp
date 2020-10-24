@@ -13,18 +13,41 @@ export default class Home extends Component {
         this.state = {
             safe: true,
             data:[],
+            userPhone: '',
+            filterKey : '',
+            homeDiv: false,
+            flatsDiv: false,
+            plotsDiv: false,
+            comerDiv: false,
         }
+        this.onFilterPress = this.onFilterPress.bind(this)
     }
     componentDidMount() {
-        axios.get(`https://property12.herokuapp.com/api/banner/get`)
+        axios.get(`https://property12.herokuapp.com/api/banner/get_approved/Approved`)
         .then(response =>{
-            console.log('response', response)
             this.setState({data: response.data.data})
         }).catch(error => {
             if (error) {
                 Alert.alert("Error", "No Data Found!")
             }
         });
+        
+    }
+    onFilterPress (key) {
+        this.setState({filterKey: key})
+        switch (key) {
+            case 'House': 
+                this.setState({homeDiv: true});
+                break;
+            case 'Plots':
+                this.setState({plotsDiv: true});
+                break;
+            case 'Commercial': 
+                this.setState({commercial: true});
+                break;
+            default:
+                break;
+        }
     }
     render() {
         return (
@@ -39,11 +62,96 @@ export default class Home extends Component {
                         placeholderTextColor="gray"
                     />
                     <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                        <CategoryCard text="House" imageSrc={require('../assets/images/icon/home.png')}/>
-                        <CategoryCard text="Flats" imageSrc={require('../assets/images/icon/company.png')}/>
-                        <CategoryCard text="Plots" imageSrc={require('../assets/images/icon/land.png')}/>
-                        <CategoryCard text="Commercial" imageSrc={require('../assets/images/icon/company.png')} textStyle={{ fontSize: 11, marginTop: 3 }} />
+                        <CategoryCard 
+                            text="House" 
+                            imageSrc={require('../assets/images/icon/home.png')}
+                            onFilterPress={this.onFilterPress}
+                            state={this.state.homeDiv}
+                        />
+                        <CategoryCard 
+                            text="Flats" 
+                            imageSrc={require('../assets/images/icon/company.png')}
+                            onFilterPress={this.onFilterPress}
+                            state={this.state.flatsDiv}
+                        />
+                        <CategoryCard 
+                            text="Plots" 
+                            imageSrc={require('../assets/images/icon/land.png')}
+                            onFilterPress={this.onFilterPress}
+                            state={this.state.plotsDiv}
+                        />
+                        <CategoryCard 
+                            text="Commercial" 
+                            imageSrc={require('../assets/images/icon/company.png')} 
+                            textStyle={{ fontSize: 11, marginTop: 3 }} 
+                            onFilterPress={this.onFilterPress}
+                            state={this.state.comerDiv}
+                        />
+                        
                     </View>
+                    <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                        <View style={{flex: 1,  flexDirection: 'row'}}>
+                            {this.state.filterKey === 'House' ? (
+                                <View style={{flex: 1,flexDirection:'row',justifyContent:'space-between'}}>
+                                    <View style={styles.filterButton}>
+                                        <Text 
+                                            style={{color: 'black', fontSize: 15}}> 
+                                            For Sale 
+                                        </Text>
+                                    </View>
+                                    <View style={styles.filterButton}>
+                                        <Text 
+                                            style={{color: 'black', fontSize: 15}}> 
+                                            For Rent 
+                                        </Text>
+                                    </View>
+                                </View>
+                                )
+                                : <View />
+                            }
+                        </View>
+                        <View style={{flex: 1,  flexDirection: 'row'}}>
+                            {this.state.filterKey === 'Flats' ? (
+                                <View style={{flex: 1,flexDirection:'row',justifyContent:'space-between'}}>
+                                    <View style={styles.filterButton}>
+                                        <Text 
+                                            style={{color: 'black', fontSize: 15}}> 
+                                            For Sale 
+                                        </Text>
+                                    </View>
+                                    <View style={styles.filterButton}>
+                                        <Text 
+                                            style={{color: 'black', fontSize: 15}}> 
+                                            For Rent 
+                                        </Text>
+                                    </View>
+                                </View>
+                                )
+                                : <View />
+                            }
+                        </View>
+                        <View style={{flex: 1,  flexDirection: 'row'}}>
+                            {this.state.filterKey === 'Commercial' ? (
+                                <View style={{flex: 1,flexDirection:'row',justifyContent:'space-between'}}>
+                                    <View style={styles.filterButton}>
+                                        <Text 
+                                            style={{color: 'black', fontSize: 15 }}> 
+                                            For Sale 
+                                        </Text>
+                                    </View>
+                                    <View style={styles.filterButton}>
+                                        <Text 
+                                            style={{color: 'black', fontSize: 15}}> 
+                                            For Rent 
+                                        </Text>
+                                    </View>
+                                </View>
+                                )
+                                : <View />
+                            }
+                        </View>
+                    </View>
+
                     <FlatList
                     style={{marginTop:10}}
                     data={this.state.data}
@@ -61,6 +169,7 @@ export default class Home extends Component {
                     keyExtractor={item => item._id}
                     showsVerticalScrollIndicator={false}
                     />
+                   
                     <StatusBar barStyle="light-content" translucent={true} backgroundColor="transparent" />
 
                 </ImageBackground>
@@ -77,7 +186,14 @@ const styles = StyleSheet.create({
     bg: {
         flex: 1,
         paddingHorizontal: 20,
-        paddingTop: 20
+        paddingTop: 35
+    },
+    filterButton: {
+        flex: 0.5, 
+        backgroundColor: 'white', 
+        borderRadius: 10, 
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     logoImg: {
         flexDirection: "row",

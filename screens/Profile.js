@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, StatusBar, Image, ImageBackground, Alert, AsyncStorage, RefreshControl, ScrollView, ToastAndroid } from 'react-native';
+import { StyleSheet, Text, Linking,  TouchableOpacity, View, StatusBar, Image, ImageBackground, Alert, AsyncStorage, RefreshControl, ScrollView, ToastAndroid } from 'react-native';
 import MyIcon from '../components/MyIcon'
 import MyBtn from '../components/MyBtn'
 import TextNavigate from '../components/TextNavigate';
 import Colors from '../constants/Colors';
 import axios from 'axios';
-
+import * as MailComposer from 'expo-mail-composer';
 
 export default class Profile extends Component {
     constructor(Props) {
@@ -78,6 +78,14 @@ export default class Profile extends Component {
         );
 
     }
+    contactAdmin () {
+        MailComposer.composeAsync({
+            subject: 'test',
+            body: 'test',
+            recipients: ['aslipropertyhelpline@gmail.com'],
+            isHtml: true
+        });
+    }
     render() {
         return (
             <View style={styles.container}>
@@ -101,9 +109,13 @@ export default class Profile extends Component {
                                 </View>
                                 <View style={{ flex: 1, paddingLeft: 10, justifyContent: 'space-around' }}>
                                     <Text style={styles.name}>{this.state.user.name}</Text>
+                                    <Text style={styles.name}>{this.state.user.phoneNo}</Text>
                                     <TextNavigate text="Edit Profile" TextStyle={styles.viewEdit} ToScreen="EditProfile" />
                                 </View>
                             </View>
+                            <TouchableOpacity onPress={this.contactAdmin}>
+                                <Text style={styles.contactAdmin}>Contact Admin</Text>
+                            </TouchableOpacity>
                         </View>
 
                         <View style={{ flex: 1, justifyContent: 'flex-end', margin: 40 }}>
@@ -123,7 +135,7 @@ const styles = StyleSheet.create({
     bg: {
         flex: 1,
         paddingHorizontal: 20,
-        paddingTop: 20
+        paddingTop: 30
     },
     logo: {
         margin: 10,
@@ -159,6 +171,17 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontStyle: 'italic',
         fontWeight: 'bold',
+    },
+    contactAdmin: {
+        color: '#fff',
+        fontSize: 25,
+        fontStyle: 'italic',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        paddingTop: 20, 
+        textDecorationLine: 'underline',
+        textDecorationStyle: 'solid',
+        textDecorationColor: '#fff',
     },
     viewEdit: {
         color: Colors.mainColor,

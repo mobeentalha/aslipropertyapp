@@ -7,8 +7,8 @@ import TextNavigate from '../components/TextNavigate';
 import Colors from '../constants/Colors';
 import axios from 'axios';
 import Spinner from 'react-native-loading-spinner-overlay';
-
-const NumberLength = 11;
+import * as MailComposer from 'expo-mail-composer';
+import {Toast} from 'native-base'
 
 export default class Login extends Component {
   constructor(Props) {
@@ -37,7 +37,7 @@ export default class Login extends Component {
       const retrievedItem = await AsyncStorage.getItem('User');
       const data = JSON.parse(retrievedItem);
       if (data) {
-        let newPhone = '+92'+this.state.phoneNo;
+        // let newPhone = '+92'+this.state.phoneNo;
         // this.props.navigation.navigate(
         //   'Auth',
         //   { newPhone },
@@ -53,7 +53,6 @@ export default class Login extends Component {
   logIn() {
     const { navigate } = this.props.navigation;
     if (this.state.phoneNo.length && this.state.password.length) {
-      if (this.state.phoneNo.length == NumberLength) {
         this.setState({ loading: true })
         axios.post(`https://property12.herokuapp.com/api/user/login`, {
           phoneNo: this.state.phoneNo,
@@ -66,28 +65,41 @@ export default class Login extends Component {
             this._storeData()
           }
           else {
-            Alert.alert("No User", "No user found!", [
-              {
-                text: 'Cancel',
-              },
-              { text: 'Create', onPress: () => navigate("SignUp") }
-            ],
-            {cancelable:true})
+            Toast.show({
+              text: 'No user found!',
+              buttonText: 'Okay',
+              type: 'danger',
+              duration: 3000
+            })
           }
         }).catch(error => {
           this.setState({ loading: false })
           if (error) {
-            ToastAndroid.show("Try again later!",ToastAndroid.SHORT);
+            Toast.show({
+              text: 'Try again later!',
+              buttonText: 'Okay',
+              type: 'danger',
+              duration: 3000
+          })
           }
         });
-      }
-      else {
-        ToastAndroid.show("Phone No should be "+NumberLength+" digits long!",ToastAndroid.SHORT);
-      }
     }
     else {
-      ToastAndroid.show("Please Fill Inputs!",ToastAndroid.SHORT);
+      Toast.show({
+        text: 'Please Fill Inputs!',
+        buttonText: 'Okay',
+        type: 'danger',
+        duration: 3000
+      })
     }
+  }
+  contactAdmin () {
+    MailComposer.composeAsync({
+        subject: 'test',
+        body: 'test',
+        recipients: ['aslipropertyhelpline@gmail.com'],
+        isHtml: true
+    });
   }
   render() {
     return (
@@ -114,7 +126,7 @@ export default class Login extends Component {
               placeholder='Phone Number'
               keyboardType={"number-pad"}
               label={this.state.phoneNo.length}
-              labelStyle={this.state.phoneNo.length == NumberLength ? styles.labelStyleGood : styles.labelStyle}
+              labelStyle={styles.labelStyleGood}
               placeholderTextColor="gray"
               onChangeText={(text) => this.setState({ phoneNo: text })}
             />
@@ -141,6 +153,12 @@ export default class Login extends Component {
           <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
             <Text style={{ textAlign: 'center', color: '#fffb' }}>Don't have an account?&ensp;</Text>
             <TextNavigate text="Sign up" ToScreen="SignUp" TextStyle={{ color: "#fff" }} />
+          </View>
+          
+          <View style={{marginTop: 30}}>
+            <TouchableOpacity onPress={this.contactAdmin}>
+              <Text style={{ textAlign: 'center', color: '#fffb' }}>Contact Admin</Text>
+            </TouchableOpacity>
           </View>
         </ImageBackground>
       </View>

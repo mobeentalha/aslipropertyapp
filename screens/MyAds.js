@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     bg: {
         flex: 1,
         paddingHorizontal: 20,
-        paddingTop: 20
+        paddingTop: 30
     },
     inputStyles: {
         borderColor: 'transparent',

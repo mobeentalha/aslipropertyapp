@@ -13,6 +13,8 @@ export default class ItemDetail extends Component {
         super(Props);
         this.state = {
             data: [],
+            userPhone: '',
+            userInfo: [],
             loaded: false,
             favorite: false,
             favoriteArray: [],
@@ -48,8 +50,6 @@ export default class ItemDetail extends Component {
                 }
             });
     }
-    
-
 
     checkFavorite() {
         if (this.state.favoriteArray.includes(this.state.data._id)) {
@@ -66,16 +66,29 @@ export default class ItemDetail extends Component {
         this.setState({ itemId: _id })
         axios.get(`https://property12.herokuapp.com/api/banner/get/` + _id)
             .then(response => {
-                console.log('response', response)
                 this.setState({ data: response.data.data })
+                this.setState({ userPhone: response.data.data.phoneNo},() => {
+                    axios.get(`https://property12.herokuapp.com/api/user/getphone/` + this.state.userPhone)
+                        .then(response => {
+                            this.setState({userInfo: response.data.data[0]})
+                        }).catch(error => {
+                            if (error) {
+                                Alert.alert("Error", "No Data Found!")
+                            }
+                        })
+                })
                 this.setState({ loaded: true })
                 this.getFavorites();
+                
             }).catch(error => {
                 if (error) {
                     Alert.alert("Error", "No Data Found!")
                 }
             });
+       
     }
+
+    
 
     favoriteClicked() {
         if (this.state.favorite) {
@@ -136,48 +149,7 @@ export default class ItemDetail extends Component {
                             Alert.alert("Error", "Not Addes")
                         }
                     })
-            }
-
-            // axios.get(`https://property12.herokuapp.com/api/favorite/get_phone/` + this.state.user.phoneNo)
-            //     .then(response => {
-            //         var data = response.data.data
-            //         if (data.length === 0) {
-            //             data = {
-            //                 bannerId: this.state.favoriteArray,
-            //                 phoneNo: this.state.user.phoneNo
-            //             }
-            //             axios.post(`https://property12.herokuapp.com/api/favorite/add`, data)
-            //                 .then(response => {
-            //                     console.log('response : ', response)
-            //                 }).catch(error => {
-            //                     if (error) {
-            //                         Alert.alert("Error", "Not Addes")
-            //                     }
-            //                 })
-            //         }
-            //         else {
-            //             for (var i = 0; i < data.length; i++) {
-            //                 favArray.push(data[i].bannerId)
-            //             }
-            //             var send = {
-            //                 bannerId: this.state.favoriteArray,
-            //                 phoneNo: this.state.user.phoneNo
-            //             }
-            //             axios.post(`https://property12.herokuapp.com/api/favorite/add`, send)
-            //                 .then(response => {
-            //                     console.log('response : ', response)
-            //                 }).catch(error => {
-            //                     if (error) {
-            //                         Alert.alert("Error", "Not Addes")
-            //                     }
-            //                 })
-            //         }
-            //         // this.setState({favorite:data})
-            //     }).catch(error => {
-            //         if (error) {
-            //             Alert.alert("Error", "No Data Found!")
-            //         }
-            //     });
+                }
         }
     }
 
@@ -186,6 +158,7 @@ export default class ItemDetail extends Component {
     }
 
     render() {
+        
         return (
             <View style={styles.container}>
                 {this.state.loaded && this.state.data._id ?
@@ -236,10 +209,17 @@ export default class ItemDetail extends Component {
                                     <View title={styles.row}>
                                         <Text style={styles.desTitle}>
                                             Description:
-                                </Text>
+                                        </Text>
                                         <Text style={styles.desDescription}>
                                             {this.state.data.description}
                                         </Text>
+                                    </View>
+                                    <View style={styles.userDiv} >
+                                        <Text style={styles.userTxt}>User Details</Text>
+                                        <DetailRow Dark={true} IconName="phone" IconColor="#fff" IconSize={25} Title="Phone Number" Description={this.state.userInfo.phoneNo} />
+                                        <DetailRow IconName="user" IconColor="#fff" IconSize={25} Title="Name" Description={this.state.userInfo.name} />
+                                        <DetailRow Dark={true} IconName="home" IconColor="#fff" IconSize={25} Title="User Id" Description={this.state.userInfo._id} />
+                                        <DetailRow IconName="building" IconColor="#fff" IconSize={25} Title="Member Since" Description={this.state.userInfo.date} />
                                     </View>
                                 </ScrollView>
                             </View>
@@ -263,7 +243,7 @@ const styles = StyleSheet.create({
     },
     bg: {
         flex: 1,
-        paddingTop: 20,
+        paddingTop: 30,
     },
     bgPadding: {
         paddingHorizontal: 20,
@@ -294,5 +274,19 @@ const styles = StyleSheet.create({
         color: "#fff",
         fontSize: 15,
         fontStyle: "italic",
+    },
+    userDiv: {
+        flex: 1,
+        borderColor: "#dedede",
+        borderWidth: 1,
+        borderRadius: 10,
+        padding: 10,
+        marginTop: 20
+    },
+    userTxt: {
+        color: "#fff",
+        fontSize: 25,
+        fontWeight: "bold",
+        marginBottom: 10
     },
 });

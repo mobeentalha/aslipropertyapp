@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 
 
 export default function CategoryCard(Props) {
-    const navigation = useNavigation()
+    const text = Props.text;
 
     const styles = StyleSheet.create({
         textStyle: {
@@ -43,24 +43,17 @@ export default function CategoryCard(Props) {
         },
     })
     return (
-        // <TouchableOpacity
-        //     // onPress={() => {
-        //     //     {
-        //     //         Props.ToScreen ? 
-        //     //             navigation.navigate(Props.ToScreen)
-        //     //      :Props.onPress;
-        //     //     }
-        //     // }}
-        //     >
-                <View style={styles.cardCon}>
-                <View>
-                    <Image source={Props.imageSrc} style={styles.cardImg} resizeMode="cover"/>
-                </View>
-                <Text
-                    style={[styles.textStyle,Props.textStyle]}>
-                    {Props.text}
-                </Text>
-                </View>
-        // </TouchableOpacity>
+            <TouchableOpacity 
+                style={styles.cardCon}
+                onPress={() => Props.onFilterPress(text)}
+            >
+                    <View>
+                        <Image source={Props.imageSrc} style={styles.cardImg} resizeMode="cover"/>
+                    </View>
+                    <Text
+                        style={[styles.textStyle,Props.textStyle]}>
+                        {Props.text}
+                    </Text>
+            </TouchableOpacity>
     )
 }
