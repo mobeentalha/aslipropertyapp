@@ -23,7 +23,8 @@ export default class EditProfile extends Component {
             email: "",
             loading: false,
             currentUser: {},
-            updated: false
+            updated: false,
+            location: "",
         }
     }
     componentDidMount() {
@@ -129,12 +130,9 @@ export default class EditProfile extends Component {
                         />
                         <Input
                             inputContainerStyle={styles.inputStyles}
-                            placeholder='CNIC'
-                            keyboardType={"number-pad"}
+                            placeholder='City of Residence'
                             placeholderTextColor="gray"
-                            label={this.state.cnic.length}
-                            labelStyle={this.state.cnic.length == CNICLength ? styles.labelStyleGood : styles.labelStyle}
-                            onChangeText={(text) => this.setState({ cnic: text })}
+                            onChangeText={(text) => this.setState({ location: text })}
                         />
                         <Input
                             inputContainerStyle={styles.inputStyles}
@@ -173,7 +171,13 @@ export default class EditProfile extends Component {
                             onChangeText={(text) => this.setState({ email: text })}
                         />
 
-                        <MyBtn title="Edit" onPress={() => this.updateUser()} textStyle={{ color: "#fff", fontSize: 17 }} containerStyle={styles.myBtn} colors={[Colors.mainColor, Colors.mainLightColor]} />
+                        <MyBtn 
+                            title="Edit" 
+                            onPress={() => this.updateUser()} 
+                            textStyle={{ color: "#fff", fontSize: 17 }} 
+                            containerStyle={styles.myBtn} 
+                            colors={[Colors.mainColor, Colors.mainLightColor]} 
+                        />
 
                     </View>
                 </ImageBackground>

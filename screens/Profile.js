@@ -80,8 +80,8 @@ export default class Profile extends Component {
     }
     contactAdmin () {
         MailComposer.composeAsync({
-            subject: 'test',
-            body: 'test',
+            subject: '',
+            body: '',
             recipients: ['aslipropertyhelpline@gmail.com'],
             isHtml: true
         });

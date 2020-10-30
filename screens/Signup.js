@@ -7,6 +7,7 @@ import TextNavigate from '../components/TextNavigate';
 import Colors from '../constants/Colors';
 import axios from 'axios';
 import Spinner from 'react-native-loading-spinner-overlay';
+import * as ImagePicker from 'expo-image-picker';
 
 const CNICLength = 13;
 const NumberLength = 11;
@@ -66,6 +67,40 @@ export default class Signup extends Component {
     }
   }
 
+  pickUserImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      base64: true
+    });
+
+    if (!result.cancelled) {
+        
+      
+      let base64Img = `data:image/jpg;base64,${result.base64}`
+      
+      //Add your cloud name
+      let apiUrl = 'https://api.cloudinary.com/v1_1/dxqyygq2o/image/upload';
+  
+      let data = {
+        "file": base64Img,
+        "upload_preset": "ipypbpvg",
+      }
+
+      fetch(apiUrl, {
+        body: JSON.stringify(data),
+        headers: {
+          'content-type': 'application/json'
+        },
+        method: 'POST',
+      }).then(async r => {
+          let data = await r.json()
+          console.log('Url Try  ::',data.secure_url)
+          this.setState({ proofImages: data.secure_url});
+          return data.secure_url
+    }).catch(err=>console.log(err))
+  }
+  
+}
   render() {
     return (
       <View style={styles.container}>
@@ -104,18 +139,18 @@ export default class Signup extends Component {
             />
             <Input
               inputContainerStyle={styles.inputStyles}
+              placeholder='City of Residence'
+              placeholderTextColor="gray"
+              onChangeText={(text) => this.setState({ location: text })}
+            />
+            <Input
+              inputContainerStyle={styles.inputStyles}
               placeholder='Phone Number'
               keyboardType={"number-pad"}
               label={this.state.phoneNo.length}
               labelStyle={this.state.phoneNo.length == NumberLength ? styles.labelStyleGood : styles.labelStyle}
               placeholderTextColor="gray"
               onChangeText={(text) => this.setState({ phoneNo: text })}
-            />
-            <Input
-              inputContainerStyle={styles.inputStyles}
-              placeholder='Location'
-              placeholderTextColor="gray"
-              onChangeText={(text) => this.setState({ location: text })}
             />
             <Input
               inputContainerStyle={styles.inputStyles}
@@ -153,10 +188,27 @@ export default class Signup extends Component {
               placeholderTextColor="gray"
               onChangeText={(text) => this.setState({ email: text })}
             />
-            <Text style={styles.caution}>All fields are mendory! (Excapt Email)</Text>
+            <Text style={styles.caution}>* All fields are mandatory except e-mail</Text>
+            <Text style={styles.caution}>** CNIC and City of Residence not visible to public</Text>
+            <Text style={styles.caution}>*** Enter exact full name for verification</Text>
           </View>
-          <MyBtn title="Sign up" onPress={() => this.create()} textStyle={{ color: "#fff", fontSize: 17 }} containerStyle={styles.buttonLogin} colors={[Colors.mainColor, Colors.mainLightColor]} />
 
+          <MyBtn 
+            title="Upload Image" 
+            onPress={this.pickUserImage} 
+            textStyle={{ color: "#fff", fontSize: 17 }} 
+            containerStyle={styles.myBtn} 
+            colors={[Colors.mainColor, Colors.mainLightColor]} 
+          />
+
+          <MyBtn 
+            title="Sign up" 
+            onPress={() => this.create()} 
+            textStyle={{ color: "#fff", fontSize: 17 }} 
+            containerStyle={styles.buttonLogin} 
+            colors={[Colors.mainColor, Colors.mainLightColor]} 
+          />
+          
           <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
             <Text style={{ textAlign: 'center', color: '#fffb' }}>Already have an account?&ensp;</Text>
             <TextNavigate text="Login" ToScreen="Login" TextStyle={{ color: "#fff" }} />
@@ -206,6 +258,7 @@ const styles = StyleSheet.create({
   },
   buttonLogin: {
     marginTop: 10,
+    marginBottom: 10,
     padding: 10,
     borderWidth: 1,
     borderRadius: 10,
@@ -219,9 +272,24 @@ const styles = StyleSheet.create({
     },
     elevation: 10
   },
+  myBtn: {
+    marginTop: 10,
+    padding: 10,
+    borderWidth: 1,
+    borderRadius: 10,
+    backgroundColor: "transparent",
+    shadowColor: 'black',
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    shadowOffset: {
+      height: 0,
+      width: 0
+    },
+    elevation: 3
+  },
   caution: {
     color: 'yellow',
-    fontSize: 12,
+    fontSize: 15,
   },
   loadingText: {
     color:Colors.loadingTxt,

@@ -7,6 +7,7 @@ import BackArrowBtn from '../components/BackArrowBtn'
 import DetailRow from '../components/DetailRow'
 import axios from 'axios';
 import MyIcon from '../components/MyIcon';
+import * as MailComposer from 'expo-mail-composer';
 
 export default class ItemDetail extends Component {
     constructor(Props) {
@@ -157,6 +158,15 @@ export default class ItemDetail extends Component {
         console.log('data : ', this.state.data)
     }
 
+    reportAd () {
+        MailComposer.composeAsync({
+            subject: '',
+            body: '',
+            recipients: ['aslipropertyhelpline@gmail.com'],
+            isHtml: true
+        });
+    }
+
     render() {
         
         return (
@@ -185,6 +195,7 @@ export default class ItemDetail extends Component {
                         />
 
                         <View style={styles.bgPadding}>
+                            <Text style={styles.detailTxt}>Title :  {this.state.data.title}</Text>
                             <View style={{ flexDirection: 'row', width: '100%' }}>
                                 <Text style={styles.detailTxt}>Details</Text>
                                 <TouchableOpacity
@@ -220,6 +231,10 @@ export default class ItemDetail extends Component {
                                         <DetailRow IconName="user" IconColor="#fff" IconSize={25} Title="Name" Description={this.state.userInfo.name} />
                                         <DetailRow Dark={true} IconName="home" IconColor="#fff" IconSize={25} Title="User Id" Description={this.state.userInfo._id} />
                                         <DetailRow IconName="building" IconColor="#fff" IconSize={25} Title="Member Since" Description={this.state.userInfo.date} />
+                                        <DetailRow Dark={true} IconName="envelope-o" IconColor="#fff" IconSize={25} Title="Email" Description={this.state.userInfo.email} />
+                                        <TouchableOpacity onPress={this.reportAd}>
+                                            <Text style={styles.reportAd}>Report Ad / User </Text>
+                                        </TouchableOpacity>
                                     </View>
                                 </ScrollView>
                             </View>
@@ -249,6 +264,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingTop: 20,
         flex: 1
+    },
+    reportAd: {
+        color: "#fff",
+        fontSize: 20, 
+        textAlign: 'center',
+        paddingTop: 10,
+        paddingBottom: 10
     },
     detailTxt: {
         color: "#fff",

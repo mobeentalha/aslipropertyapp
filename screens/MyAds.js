@@ -69,21 +69,24 @@ export default class MyAds extends Component {
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: "space-between" }}>
                         {this.state.myAds.length ? 
-                        <FlatList
-                        style={{flex:1}}
-                        data={this.state.myAds}
-                        renderItem={({item}) => 
-                            <ItemCard
-                                imageSrc={{uri:item.image[0]}} 
-                                price={item.price} 
-                                description={item.description} 
-                                tag={item.city}
-                                _id={item._id}
+                            <FlatList
+                            style={{flex:1}}
+                            data={this.state.myAds}
+                            renderItem={({item}) =>
+                            <> 
+                                <MyIcon name="remove" size={20} color="red" /> 
+                                <ItemCard
+                                    imageSrc={{uri:item.image[0]}} 
+                                    price={item.price} 
+                                    description={item.description} 
+                                    tag={item.city}
+                                    _id={item._id}
+                                />
+                            </>
+                            }
+                            keyExtractor={item => item._id}
+                            showsVerticalScrollIndicator={false}
                             />
-                        }
-                        keyExtractor={item => item._id}
-                        showsVerticalScrollIndicator={false}
-                        />
                     :
                     <View style={styles.noDataCon}>
                         <Text style={styles.noData}>No Data Found</Text>

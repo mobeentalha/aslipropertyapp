@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {View } from 'react-native'
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -64,7 +65,7 @@ const HomeTabsScreen = () => (
     headerShown: false,
   }}
   tabBarOptions={{
-    style:{height:52}
+    style:{height:100}
   }}
 
     initialRouteName="Home">
@@ -151,14 +152,15 @@ export default class App extends Component {
     this.state = {
       isLoaded: false,
       logged:false,
+      splash: false,
     }
   }
   componentDidMount() {
     this._retrieveData();
     //only while testing!
     setTimeout(() => {
-      this.setState({ isLoaded: true })
-    }, 1000);
+      this.setState({ isLoaded: true, splash: true})
+    }, 5000);
   }
   async _retrieveData() {
     try {

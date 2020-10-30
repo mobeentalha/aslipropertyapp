@@ -278,7 +278,6 @@ export default class AddItem extends Component {
     };
 
     render() {
-        console.log('device id : ', this.state.device_id);
         return (
             <View style={styles.container}>
                 <ImageBackground source={require("../assets/images/bg.png")} style={styles.bg}>
@@ -371,6 +370,7 @@ export default class AddItem extends Component {
                                 { label: 'Copy of statement' },
                                 { label: 'Copy of Registry' },
                                 { label: 'Copy of Fartt' },
+                                { label: 'Other Documents' },
                             ]}
                             defaultIndex={0}
                             dropDownMaxHeight={100}
@@ -380,25 +380,14 @@ export default class AddItem extends Component {
                         />
 
                         <MyBtn 
-                            title="Add Ownership Picture" 
+                            title="Proof of Ownership" 
                             onPress={this.pickProofImage} 
                             textStyle={{ color: "#fff", fontSize: 17 }} 
                             containerStyle={styles.myBtn} 
                             colors={[Colors.mainColor, Colors.mainLightColor]} 
                         />
 
-                        <View style={styles.imgCon}>
-                            {/* {this.state.proofImages && (
-                                <View>
-                                    <TouchableOpacity 
-                                    onPress={() => this.MyAlert("image1")} 
-                                    style={styles.imgRemoveIconCon}>
-                                        <MyIcon name="times" size={15} color="#fff" />
-                                    </TouchableOpacity>
-                                    <Image source={{ uri: this.state.proofImages.url }} style={styles.imgStyle} />
-                                </View> 
-                            )} */}
-                        </View>
+                        
 
                         <Text 
                             style={{ textAlign: 'center', color: '#fff', fontSize: 20, fontWeight: 'bold', fontStyle: 'italic', marginTop: 20 }}>
