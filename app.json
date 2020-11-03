@@ -4,7 +4,7 @@
     "slug": "Asli-Property",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/appicon.png",
+    "icon": "./assets/appicon.jpg",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",

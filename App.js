@@ -167,11 +167,15 @@ export default class App extends Component {
       const retrievedItem = await AsyncStorage.getItem('User');
       if (JSON.stringify(retrievedItem) > 0) {
         this.setState({logged:true})
-        this.setState({ isLoaded: true })
+        this.setTimeout( () => {
+              this.setState({ isLoaded: true })
+        },3000);
       }
       else{
         this.setState({logged:false})
-        this.setState({ isLoaded: true })
+        this.setTimeout( () => {
+              this.setState({ isLoaded: true })
+        },3000);
       }
     } catch (error) {
       console.log(error.message);

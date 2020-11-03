@@ -8,6 +8,7 @@ import Colors from '../constants/Colors';
 import axios from 'axios';
 import Spinner from 'react-native-loading-spinner-overlay';
 import * as ImagePicker from 'expo-image-picker';
+import {Toast} from 'native-base'
 
 const CNICLength = 13;
 const NumberLength = 11;
@@ -44,26 +45,52 @@ export default class Signup extends Component {
         }).then(response => {
           this.setState({ loading: false })
           if (response.status==200) {
-            ToastAndroid.show("User has been created!",ToastAndroid.LONG);
-            navigate("Login")
+            Toast.show({
+              text: 'User has been created!',
+              buttonText: 'Okay',
+              type: 'success',
+              duration: 3000
+            })
+            let newPhone = '+92'+this.state.phoneNo;
+            navigate("Auth", { newPhone })
           } 
         }).catch(error => {
           this.setState({ loading: false })
           if (error) {
-            ToastAndroid.show("Try again later!",ToastAndroid.SHORT);
+            Toast.show({
+              text: 'Try again later!',
+              buttonText: 'Okay',
+              type: 'danger',
+              duration: 3000
+            })
           }
         });
       }
       else {
-      ToastAndroid.show("Make sure that password is same!",ToastAndroid.SHORT);
+        Toast.show({
+          text: 'Make sure that password is same!',
+          buttonText: 'Okay',
+          type: 'danger',
+          duration: 3000
+        }) 
       }
     }
     else{
-      ToastAndroid.show("CNIC should be "+CNICLength+" digit long!\nPhone No should be "+NumberLength+" digit long!",ToastAndroid.SHORT);
+      Toast.show({
+        text: 'CNIC should be "+CNICLength+" digit long!\nPhone No should be "+NumberLength+" digit long!',
+        buttonText: 'Okay',
+        type: 'warning',
+        duration: 3000
+      }) 
     }
     }
     else {
-      ToastAndroid.show("Please Fill Inputs!",ToastAndroid.SHORT);
+      Toast.show({
+        text: 'Please Fill Inputs!',
+        buttonText: 'Okay',
+        type: 'danger',
+        duration: 3000
+      }) 
     }
   }
 
